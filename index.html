@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#173d2d" />
+  <meta name="description" content="Temukan menu makanan dan minuman, lihat informasi usaha, lalu pesan langsung melalui WhatsApp." />
+  <title>Nama Kedai — Sajian Favoritmu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --green: #173d2d;
+      --green-2: #24543e;
+      --cream: #f7f3e9;
+      --paper: #fffdf8;
+      --orange: #ed8a3b;
+      --ink: #1e2a22;
+      --muted: #6d786f;
+      --line: #e8e4d9;
+      --shadow: 0 18px 48px rgba(28, 48, 35, .10);
+      --radius: 22px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: "DM Sans", sans-serif; }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    img { display: block; max-width: 100%; }
+    .container { width: min(1160px, calc(100% - 40px)); margin: 0 auto; }
+    .topline { background: var(--green); color: #f8f4e9; text-align: center; padding: 9px 14px; font-size: 12px; letter-spacing: .04em; }
+    .topline strong { color: #ffc18d; }
+    .site-header { position: sticky; top: 0; z-index: 20; background: rgba(255,253,248,.93); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(232,228,217,.8); }
+    .nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    .brand-mark { width: 42px; height: 42px; display: grid; place-items: center; color: white; background: var(--green); border-radius: 14px; font-size: 21px; box-shadow: 0 7px 16px rgba(23,61,45,.18); }
+    .brand-name { font-weight: 800; letter-spacing: -.04em; font-size: 17px; line-height: 1.1; }
+    .brand-tag { display: block; color: var(--muted); font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; margin-top: 4px; }
+    .nav-links { display: flex; align-items: center; gap: 30px; color: #46554a; font-size: 13px; font-weight: 700; }
+    .nav-links a:hover { color: var(--orange); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; border: 0; border-radius: 999px; padding: 13px 20px; font-size: 13px; font-weight: 800; transition: transform .2s, box-shadow .2s, background .2s; }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: var(--orange); color: #241d15; box-shadow: 0 9px 20px rgba(237,138,59,.23); }
+    .btn-primary:hover { background: #f39a50; box-shadow: 0 12px 24px rgba(237,138,59,.30); }
+    .btn-dark { background: var(--green); color: #fffdf8; }
+    .btn-dark:hover { background: var(--green-2); }
+    .menu-toggle { display: none; width: 42px; height: 42px; border: 1px solid var(--line); background: white; color: var(--green); border-radius: 13px; font-size: 20px; }
+    .hero { padding: 58px 0 66px; background: radial-gradient(circle at 3% 20%, rgba(237,138,59,.13), transparent 28%), var(--cream); overflow: hidden; }
+    .hero-grid { display: grid; grid-template-columns: 1.02fr .98fr; gap: 52px; align-items: center; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border: 1px solid #e8ddca; border-radius: 999px; color: var(--green); background: rgba(255,253,248,.72); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .eyebrow span { width: 7px; height: 7px; display: inline-block; border-radius: 50%; background: var(--orange); }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 610px; margin: 19px 0 17px; color: var(--green); font-family: "Playfair Display", serif; font-size: clamp(42px, 5.5vw, 69px); line-height: 1.04; letter-spacing: -.045em; }
+    h1 em { color: var(--orange); font-style: normal; }
+    .hero-copy { max-width: 510px; margin-bottom: 26px; color: #637067; font-size: 15px; line-height: 1.8; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .hero-note { display: flex; align-items: center; gap: 10px; margin-top: 28px; color: #6e796f; font-size: 11px; font-weight: 600; }
+    .note-icon { width: 25px; height: 25px; display: grid; place-items: center; border-radius: 50%; color: var(--green); background: #e8eadc; }
+    .hero-visual { position: relative; min-height: 430px; }
+    .hero-photo { position: absolute; inset: 5px 26px 18px 22px; overflow: hidden; border-radius: 46% 46% 22px 22px; background: #d7c5a8; box-shadow: 0 25px 55px rgba(48,46,30,.18); }
+    .hero-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .photo-label { position: absolute; left: 0; bottom: 42px; display: flex; align-items: center; gap: 10px; max-width: 220px; padding: 14px 17px; border: 1px solid rgba(255,255,255,.55); border-radius: 16px; background: rgba(255,253,248,.94); box-shadow: var(--shadow); }
+    .photo-label b { display: block; color: var(--green); font-size: 12px; }
+    .photo-label small { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; }
+    .photo-label .emoji { font-size: 25px; }
+    .round-stamp { position: absolute; top: 7px; right: 0; width: 100px; height: 100px; display: grid; place-items: center; border: 7px solid var(--cream); border-radius: 50%; background: var(--orange); color: #342315; text-align: center; font-size: 10px; font-weight: 800; line-height: 1.25; transform: rotate(10deg); }
+    .section { padding: 82px 0; }
+    .section-soft { background: #faf8f1; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 30px; }
+    .kicker { margin-bottom: 9px; color: #c87530; font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    h2 { margin-bottom: 8px; color: var(--green); font-family: "Playfair Display", serif; font-size: clamp(31px, 4vw, 43px); line-height: 1.12; letter-spacing: -.03em; }
+    .section-desc { max-width: 520px; margin-bottom: 0; color: var(--muted); font-size: 13px; line-height: 1.7; }
+    .menu-tools { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-bottom: 25px; }
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; }
+    .filter-btn { border: 1px solid var(--line); border-radius: 999px; padding: 9px 15px; color: #667168; background: white; font-size: 11px; font-weight: 800; transition: .2s; }
+    .filter-btn.active, .filter-btn:hover { border-color: var(--green); color: white; background: var(--green); }
+    .search { width: min(260px, 100%); position: relative; }
+    .search input { width: 100%; border: 1px solid var(--line); border-radius: 999px; outline: none; padding: 11px 15px 11px 38px; background: white; color: var(--ink); font-size: 12px; }
+    .search input:focus { border-color: var(--green-2); box-shadow: 0 0 0 3px rgba(36,84,62,.09); }
+    .search span { position: absolute; left: 14px; top: 9px; color: #879087; }
+    .menu-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 19px; }
+    .menu-card { overflow: hidden; border: 1px solid #eee9dd; border-radius: 18px; background: white; transition: transform .22s, box-shadow .22s; }
+    .menu-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+    .menu-image { position: relative; height: 172px; overflow: hidden; background: #e9e2d4; }
+    .menu-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+    .menu-card:hover .menu-image img { transform: scale(1.05); }
+    .menu-type { position: absolute; left: 11px; top: 11px; padding: 6px 9px; border-radius: 999px; color: var(--green); background: rgba(255,253,248,.94); font-size: 9px; font-weight: 800; }
+    .menu-info { padding: 15px; }
+    .menu-info h3 { margin-bottom: 6px; color: var(--green); font-size: 15px; }
+    .menu-info p { min-height: 34px; margin-bottom: 12px; color: #7a837b; font-size: 10px; line-height: 1.6; }
+    .menu-bottom { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .price { color: #bd692c; font-size: 14px; font-weight: 800; }
+    .order-small { border: 0; border-radius: 999px; padding: 9px 12px; color: white; background: var(--green); font-size: 10px; font-weight: 800; }
+    .order-small:hover { background: var(--green-2); }
+    .empty-state { grid-column: 1/-1; padding: 35px; border: 1px dashed #d8d3c7; border-radius: 18px; color: var(--muted); text-align: center; font-size: 13px; }
+    /* GALERI FOTO CONTOH */
+    .gallery-grid { display: grid; grid-template-columns: 1.2fr .8fr .8fr; grid-template-rows: 190px 190px; gap: 14px; }
+    .gallery-card { position: relative; display: block; width: 100%; min-width: 0; min-height: 0; overflow: hidden; padding: 0; border: 0; border-radius: 19px; background: #e8e0d0; text-align: left; }
+    .gallery-card:first-child { grid-row: 1 / 3; }
+    .gallery-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .45s; }
+    .gallery-card:hover img, .gallery-card:focus-visible img { transform: scale(1.06); }
+    .gallery-card:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+    .gallery-caption { position: absolute; left: 0; right: 0; bottom: 0; padding: 32px 16px 15px; color: white; background: linear-gradient(transparent, rgba(10,25,17,.78)); font-size: 13px; font-weight: 800; }
+    .gallery-caption small { display: block; margin-top: 4px; color: rgba(255,255,255,.82); font-size: 10px; font-weight: 500; }
+    .image-error::after { content: '🍽️\A Foto contoh tidak tersedia'; position: absolute; inset: 0; display: grid; place-content: center; white-space: pre-line; text-align: center; color: #607064; background: linear-gradient(135deg,#eee8d9,#dce5d9); font-size: 14px; font-weight: 700; line-height: 2; }
+    .hero-photo, .about-photo, .menu-image, .gallery-card { isolation: isolate; }
+    .hero-photo.image-error::after, .about-photo.image-error::after, .menu-image.image-error::after, .gallery-card.image-error::after { z-index: 1; }
+    .lightbox { position: fixed; inset: 0; z-index: 100; display: none; place-items: center; padding: 24px; background: rgba(9,20,14,.88); }
+    .lightbox.open { display: grid; }
+    .lightbox-panel { position: relative; width: min(100%, 980px); max-height: 90vh; display: grid; justify-items: center; gap: 12px; }
+    .lightbox-panel img { max-width: 100%; max-height: 78vh; object-fit: contain; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+    .lightbox-caption { color: white; text-align: center; font-size: 13px; }
+    .lightbox-close { position: absolute; top: -17px; right: -10px; z-index: 2; width: 42px; height: 42px; border: 1px solid rgba(255,255,255,.35); border-radius: 50%; color: white; background: rgba(20,40,28,.85); font-size: 24px; }
+    .about-grid { display: grid; grid-template-columns: .92fr 1.08fr; gap: 60px; align-items: center; }
+    .about-photo { height: 390px; overflow: hidden; border-radius: 28px; background: #ddd1bd; box-shadow: var(--shadow); }
+    .about-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .about-copy p { color: var(--muted); font-size: 13px; line-height: 1.9; }
+    .benefit-list { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; margin: 24px 0 28px; }
+    .benefit { display: flex; align-items: center; gap: 10px; color: #425348; font-size: 11px; font-weight: 700; }
+    .benefit span { width: 30px; height: 30px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 10px; color: var(--green); background: #edf0e6; }
+    .info-band { padding: 58px 0; color: white; background: var(--green); }
+    .info-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; }
+    .info-item { display: flex; align-items: flex-start; gap: 14px; }
+    .info-icon { width: 43px; height: 43px; display: grid; place-items: center; flex: 0 0 auto; border: 1px solid rgba(255,255,255,.2); border-radius: 14px; color: #ffc18d; font-size: 18px; }
+    .info-item h3 { margin: 2px 0 6px; color: #fff7e9; font-size: 13px; }
+    .info-item p { margin: 0; color: #c7d2c8; font-size: 11px; line-height: 1.7; white-space: pre-line; }
+    .cta { padding: 78px 0; background: var(--cream); text-align: center; }
+    .cta-inner { max-width: 650px; margin: auto; }
+    .cta h2 { margin-bottom: 13px; }
+    .cta p { margin-bottom: 24px; color: var(--muted); font-size: 13px; line-height: 1.8; }
+    footer { padding: 25px 0; color: #d0d9d0; background: #102f22; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; font-size: 10px; }
+    .footer-brand { color: white; font-weight: 800; font-size: 13px; }
+    .toast { position: fixed; left: 50%; bottom: 22px; z-index: 50; width: max-content; max-width: calc(100% - 32px); padding: 13px 17px; border-radius: 13px; color: white; background: #263d30; box-shadow: var(--shadow); font-size: 12px; opacity: 0; pointer-events: none; transform: translate(-50%, 12px); transition: .25s; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    @media (max-width: 980px) {
+      .hero-grid { gap: 25px; }
+      .hero-visual { min-height: 380px; }
+      .menu-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+      .menu-image { height: 160px; }
+      .gallery-grid { grid-template-rows: 160px 160px; }
+    }
+    @media (max-width: 720px) {
+      .container { width: min(100% - 30px, 560px); }
+      .nav { min-height: 66px; }
+      .nav-links { display: none; position: absolute; left: 15px; right: 15px; top: 70px; padding: 17px; border: 1px solid var(--line); border-radius: 17px; background: white; box-shadow: var(--shadow); flex-direction: column; align-items: stretch; gap: 0; }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: 12px 8px; }
+      .nav > .btn { display: none; }
+      .menu-toggle { display: block; }
+      .hero { padding: 43px 0 48px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 25px; }
+      h1 { max-width: 500px; font-size: clamp(42px, 12vw, 59px); }
+      .hero-copy { font-size: 13px; }
+      .hero-visual { min-height: 340px; width: min(100%, 460px); margin: 0 auto; }
+      .hero-photo { inset: 0 22px 13px 22px; border-radius: 46% 46% 20px 20px; }
+      .round-stamp { width: 80px; height: 80px; font-size: 8px; border-width: 5px; }
+      .photo-label { bottom: 25px; padding: 11px 13px; }
+      .section { padding: 62px 0; }
+      .section-head { display: block; }
+      .section-head .btn { margin-top: 17px; }
+      .menu-tools { display: block; }
+      .filters { margin-bottom: 13px; }
+      .search { width: 100%; }
+      .menu-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+      .menu-image { height: clamp(120px, 37vw, 170px); }
+      .menu-info { padding: 12px; }
+      .menu-info h3 { font-size: 13px; }
+      .menu-info p { min-height: 48px; font-size: 9px; }
+      .price { font-size: 12px; }
+      .order-small { padding: 8px 10px; font-size: 9px; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 210px 145px 145px; gap: 10px; }
+      .gallery-card:first-child { grid-column: 1 / 3; grid-row: auto; }
+      .about-grid { grid-template-columns: 1fr; gap: 27px; }
+      .about-photo { height: 280px; }
+      .benefit-list { gap: 12px 8px; }
+      .benefit { font-size: 10px; }
+      .info-grid { grid-template-columns: 1fr; gap: 23px; }
+      .info-band { padding: 42px 0; }
+      .cta { padding: 62px 0; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 370px) {
+      .container { width: calc(100% - 24px); }
+      .menu-grid { gap: 9px; }
+      .gallery-grid { grid-template-rows: 180px 125px 125px; }
+      .menu-info { padding: 10px; }
+      .menu-bottom { align-items: flex-start; flex-direction: column; }
+      .order-small { width: 100%; }
+      .hero-actions .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <!--
+    CARA EDIT CEPAT:
+    1) Ubah CONFIG di bagian JavaScript: nama usaha, WhatsApp, alamat, jam buka.
+    2) Ubah daftar MENU: nama, kategori, deskripsi, harga, dan foto.
+    3) Foto pada bagian GALERI dapat diganti melalui atribut data-image dan src pada kartu galeri.
+    3) Nomor WhatsApp harus memakai kode negara tanpa tanda + atau spasi, contoh format: 62xxxxxxxxxxx.
+    Harga/menu di bawah hanya CONTOH DEMO. Sesuaikan sebelum website dipublikasikan.
+  -->
+  <div class="topline">Selamat datang di <strong id="topBusinessName">Kedai Kita</strong> · Pesan mudah langsung melalui WhatsApp</div>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="#beranda" aria-label="Kembali ke beranda">
+        <span class="brand-mark">✦</span>
+        <span><span class="brand-name" id="brandName">Nama Kedai</span><span class="brand-tag">Sajian penuh cerita</span></span>
+      </a>
+      <nav class="nav-links" id="navLinks" aria-label="Navigasi utama">
+        <a href="#beranda">Beranda</a><a href="#menu">Menu</a><a href="#galeri">Galeri Foto</a><a href="#tentang">Tentang</a><a href="#kontak">Kontak</a>
+      </nav>
+      <a class="btn btn-primary" href="#menu">Lihat Menu <span>↗</span></a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Buka navigasi" aria-expanded="false">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="beranda">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow"><span></span> Rasa nikmat, pesan praktis</div>
+          <h1>Temukan sajian yang bikin hari lebih <em>istimewa.</em></h1>
+          <p class="hero-copy">Lihat pilihan makanan dan minuman kami, temukan yang kamu suka, lalu pesan dengan mudah. Informasi menu dan kontak tersedia dalam satu halaman.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#menu">Jelajahi Menu <span>→</span></a>
+            <button class="btn btn-dark" type="button" onclick="contactWhatsApp('Halo, saya ingin bertanya tentang menu.')">Hubungi Kami <span>↗</span></button>
+          </div>
+          <div class="hero-note"><span class="note-icon">✓</span> Pilih menu · Hubungi kedai · Konfirmasi pesanan</div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-photo"><img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1100&q=85" alt="Sajian makanan di atas meja" onerror="this.closest('.hero-photo').classList.add('image-error');this.remove()" /></div>
+          <div class="round-stamp">DIBUAT<br />UNTUK<br />DINIKMATI ✦</div>
+          <div class="photo-label"><span class="emoji">🍽️</span><span><b>Pilihan menu tersedia</b><small>Temukan favoritmu hari ini</small></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="menu">
+      <div class="container">
+        <div class="section-head">
+          <div><div class="kicker">Menu pilihan</div><h2>Ada yang menggugah selera?</h2><p class="section-desc">Jelajahi daftar menu di bawah ini. Gunakan kategori atau pencarian untuk menemukan pilihan yang kamu inginkan.</p></div>
+          <a class="btn btn-dark" href="#kontak">Info Pemesanan <span>→</span></a>
+        </div>
+        <div class="menu-tools">
+          <div class="filters" aria-label="Filter kategori">
+            <button class="filter-btn active" data-category="Semua">Semua</button>
+            <button class="filter-btn" data-category="Makanan">Makanan</button>
+            <button class="filter-btn" data-category="Minuman">Minuman</button>
+            <button class="filter-btn" data-category="Camilan">Camilan</button>
+          </div>
+          <label class="search"><span>⌕</span><input id="menuSearch" type="search" placeholder="Cari menu..." aria-label="Cari menu" /></label>
+        </div>
+        <div class="menu-grid" id="menuGrid"></div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="galeri">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="kicker">Galeri foto</div>
+            <h2>Lihat contoh sajian kami.</h2>
+            <p class="section-desc">Contoh foto makanan </p>
+          </div>
+        </div>
+        <div class="gallery-grid" id="galleryGrid">
+          <button class="gallery-card" type="button" data-image="https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=1500&q=90" data-caption="Nasi ayam — contoh foto menu" aria-label="Perbesar foto nasi ayam">
+            <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=1000&q=85" alt="Contoh sajian nasi ayam" loading="lazy" onerror="this.closest('.gallery-card').classList.add('image-error');this.remove()" />
+            <span class="gallery-caption">Sajian nasi <small>Contoh foto menu utama</small></span>
+          </button>
+          <button class="gallery-card" type="button" data-image="https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=1500&q=90" data-caption="Nasi goreng — contoh foto menu" aria-label="Perbesar foto nasi goreng">
+            <img src="https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=900&q=85" alt="Contoh nasi goreng" loading="lazy" onerror="this.closest('.gallery-card').classList.add('image-error');this.remove()" />
+            <span class="gallery-caption">Nasi goreng <small>Contoh menu makanan</small></span>
+          </button>
+          <button class="gallery-card" type="button" data-image="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=1500&q=90" data-caption="Mie goreng — contoh foto menu" aria-label="Perbesar foto mie goreng">
+            <img src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=900&q=85" alt="Contoh mie goreng" loading="lazy" onerror="this.closest('.gallery-card').classList.add('image-error');this.remove()" />
+            <span class="gallery-caption">Mie goreng <small>Contoh menu favorit</small></span>
+          </button>
+          <button class="gallery-card" type="button" data-image="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=1500&q=90" data-caption="Kopi susu — contoh foto minuman" aria-label="Perbesar foto kopi susu">
+            <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=900&q=85" alt="Contoh minuman kopi susu" loading="lazy" onerror="this.closest('.gallery-card').classList.add('image-error');this.remove()" />
+            <span class="gallery-caption">Minuman segar <small>Contoh foto minuman</small></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="tentang">
+      <div class="container about-grid">
+        <div class="about-photo"><img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1000&q=85" alt="Hidangan makanan yang disajikan" loading="lazy" onerror="this.closest('.about-photo').classList.add('image-error');this.remove()" /></div>
+        <div class="about-copy">
+          <div class="kicker">Tentang usaha</div>
+          <h2>Kenalan lebih dekat dengan <span id="aboutBusinessName">Nama Kedai</span>.</h2>
+          <p>Halaman ini membantu pelanggan mengenal pilihan menu dan cara menghubungi usaha kuliner. Ganti bagian ini dengan cerita asli usaha kamu: kapan mulai berjualan, jenis sajian yang ditawarkan, dan hal yang ingin pelanggan ketahui.</p>
+          <div class="benefit-list">
+            <div class="benefit"><span>☷</span> Menu dan harga jelas</div>
+            <div class="benefit"><span>⌕</span> Menu mudah dicari</div>
+            <div class="benefit"><span>☏</span> Kontak langsung</div>
+            <div class="benefit"><span>♡</span> Tampilan ramah HP</div>
+          </div>
+          <a class="btn btn-primary" href="#menu">Lihat Pilihan Menu <span>→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="info-band" id="kontak">
+      <div class="container info-grid">
+        <div class="info-item"><span class="info-icon">⌖</span><div><h3>Lokasi Usaha</h3><p id="businessAddress">Tambahkan alamat lengkap usaha kamu di bagian CONFIG.</p></div></div>
+        <div class="info-item"><span class="info-icon">◷</span><div><h3>Jam Operasional</h3><p id="businessHours">Tambahkan hari dan jam buka usaha kamu di bagian CONFIG.</p></div></div>
+        <div class="info-item"><span class="info-icon">☏</span><div><h3>Hubungi Kami</h3><p id="businessPhone">Tambahkan nomor WhatsApp usaha kamu di bagian CONFIG.</p></div></div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="container cta-inner">
+        <div class="kicker">Siap memesan?</div>
+        <h2>Menu pilihanmu tinggal selangkah lagi.</h2>
+        <p>Hubungi kami untuk menanyakan ketersediaan menu, harga terbaru, dan detail pemesanan. Pesanan akan dikonfirmasi langsung oleh pihak usaha.</p>
+        <button class="btn btn-primary" type="button" onclick="contactWhatsApp('Halo, saya ingin memesan. Mohon info menu yang tersedia.')">Pesan melalui WhatsApp <span>↗</span></button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner"><div><div class="footer-brand" id="footerBusinessName">Nama Kedai</div><div style="margin-top:5px">Sajian pilihan untuk menemani harimu.</div></div><div>© <span id="yearNow"></span> <span id="footerName2">Nama Kedai</span>. Informasi dapat berubah, silakan konfirmasi kepada usaha.</div></div>
+  </footer>
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Pratinjau foto">
+    <div class="lightbox-panel">
+      <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Tutup foto">×</button>
+      <img id="lightboxImage" src="" alt="Pratinjau foto makanan" />
+      <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    // ========================= PENGATURAN USAHA =========================
+    // Isi data usaha yang benar sebelum dipublikasikan.
+   const CONFIG = {
+  businessName: "Kedai Kita",
+  whatsapp: "6285713843028",
+  address: "Kedai Kita",
+  hours: "Senin-Minggu, 09.00-21.00 WIB",
+  phoneDisplay: "085713843028"
+};
+
+    // ========================= DATA MENU DEMO =========================
+    // Nama, deskripsi, dan harga berikut hanya contoh. Ganti sesuai menu serta harga asli usaha.
+    const MENU = [
+      { id: 1, name: "Nasi Ayam Bakar", category: "Makanan", description: "Nasi dengan ayam bakar dan pelengkap pilihan.", price: 22000, image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80" },
+      { id: 2, name: "Mie Goreng", category: "Makanan", description: "Mie goreng dengan sayuran dan topping.", price: 18000, image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80" },
+      { id: 3, name: "Ayam Crispy", category: "Makanan", description: "Ayam berbalut tepung renyah untuk menu makan.", price: 20000, image: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=800&q=80" },
+      { id: 4, name: "Nasi Goreng", category: "Makanan", description: "Nasi goreng dengan racikan bumbu rumahan.", price: 17000, image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80" },
+      { id: 5, name: "Es Teh", category: "Minuman", description: "Minuman teh dingin untuk menemani santapan.", price: 5000, image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=800&q=80" },
+      { id: 6, name: "Kopi Susu", category: "Minuman", description: "Perpaduan kopi dan susu yang nikmat.", price: 14000, image: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=800&q=80" },
+      { id: 7, name: "Kentang Goreng", category: "Camilan", description: "Kentang goreng hangat untuk camilan.", price: 12000, image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=800&q=80" },
+      { id: 8, name: "Pisang Cokelat", category: "Camilan", description: "Camilan pisang dengan isian cokelat.", price: 10000, image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=800&q=80" }
+    ];
+
+    const rupiah = (value) => new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(value);
+    const menuGrid = document.getElementById("menuGrid");
+    const searchInput = document.getElementById("menuSearch");
+    let activeCategory = "Semua";
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 3300);
+    }
+
+    function contactWhatsApp(message) {
+      const phone = String(CONFIG.whatsapp || "").replace(/\D/g, "");
+      if (!phone) {
+        showToast("Nomor WhatsApp belum diatur. Isi CONFIG.whatsapp pada bagian JavaScript.");
+        return;
+      }
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+
+    function orderMenu(item) {
+      contactWhatsApp(`Halo ${CONFIG.businessName}, saya ingin memesan:\n${item.name}\nHarga pada website: ${rupiah(item.price)}\nMohon konfirmasi ketersediaannya. Terima kasih.`);
+    }
+
+    function renderMenu() {
+      const query = searchInput.value.trim().toLowerCase();
+      const filtered = MENU.filter(item => {
+        const categoryMatch = activeCategory === "Semua" || item.category === activeCategory;
+        const queryMatch = `${item.name} ${item.description} ${item.category}`.toLowerCase().includes(query);
+        return categoryMatch && queryMatch;
+      });
+      if (!filtered.length) {
+        menuGrid.innerHTML = '<div class="empty-state">Menu tidak ditemukan. Coba kata kunci atau kategori lain.</div>';
+        return;
+      }
+      menuGrid.innerHTML = filtered.map(item => `
+        <article class="menu-card">
+          <div class="menu-image">
+            <img src="${item.image}" alt="${item.name}" loading="lazy" onerror="this.closest('.menu-image').classList.add('image-error');this.remove()" />
+            <span class="menu-type">${item.category}</span>
+          </div>
+          <div class="menu-info">
+            <h3>${item.name}</h3>
+            <p>${item.description}</p>
+            <div class="menu-bottom"><span class="price">${rupiah(item.price)}</span><button class="order-small" type="button" onclick="orderMenu(MENU.find(menu => menu.id === ${item.id}))">Pesan ↗</button></div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function applyBusinessConfig() {
+      const name = CONFIG.businessName || "Nama Kedai";
+      ["topBusinessName", "brandName", "aboutBusinessName", "footerBusinessName", "footerName2"].forEach(id => {
+        document.getElementById(id).textContent = name;
+      });
+      document.title = `${name} — Sajian Favoritmu`;
+      document.getElementById("businessAddress").textContent = CONFIG.address || "Alamat belum diisi. Tambahkan alamat usaha pada bagian CONFIG.";
+      document.getElementById("businessHours").textContent = CONFIG.hours || "Jam operasional belum diisi. Tambahkan hari dan jam buka pada bagian CONFIG.";
+      document.getElementById("businessPhone").textContent = CONFIG.phoneDisplay || (CONFIG.whatsapp ? `WhatsApp: ${CONFIG.whatsapp}` : "Nomor WhatsApp belum diisi pada bagian CONFIG.");
+      document.getElementById("yearNow").textContent = new Date().getFullYear();
+    }
+
+    document.querySelectorAll(".filter-btn").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".filter-btn").forEach(item => item.classList.remove("active"));
+        button.classList.add("active");
+        activeCategory = button.dataset.category;
+        renderMenu();
+      });
+    });
+    searchInput.addEventListener("input", renderMenu);
+
+    const menuToggle = document.getElementById("menuToggle");
+    const navLinks = document.getElementById("navLinks");
+    menuToggle.addEventListener("click", () => {
+      const opened = navLinks.classList.toggle("open");
+      menuToggle.setAttribute("aria-expanded", String(opened));
+      menuToggle.textContent = opened ? "×" : "☰";
+    });
+    navLinks.querySelectorAll("a").forEach(link => link.addEventListener("click", () => {
+      navLinks.classList.remove("open");
+      menuToggle.setAttribute("aria-expanded", "false");
+      menuToggle.textContent = "☰";
+    }));
+
+    // Galeri: klik foto untuk melihat ukuran lebih besar.
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImage = document.getElementById("lightboxImage");
+    const lightboxCaption = document.getElementById("lightboxCaption");
+    const lightboxClose = document.getElementById("lightboxClose");
+
+    function closeLightbox() {
+      lightbox.classList.remove("open");
+      lightbox.setAttribute("aria-hidden", "true");
+      lightboxImage.src = "";
+      document.body.style.overflow = "";
+    }
+
+    document.getElementById("galleryGrid").addEventListener("click", event => {
+      const card = event.target.closest(".gallery-card");
+      if (!card || !card.dataset.image) return;
+      lightboxImage.src = card.dataset.image;
+      lightboxCaption.textContent = card.dataset.caption || "Foto contoh kuliner";
+      lightbox.classList.add("open");
+      lightbox.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      lightboxClose.focus();
+    });
+
+    lightboxClose.addEventListener("click", closeLightbox);
+    lightbox.addEventListener("click", event => {
+      if (event.target === lightbox) closeLightbox();
+    });
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape" && lightbox.classList.contains("open")) closeLightbox();
+    });
+
+    applyBusinessConfig();
+    renderMenu();
+  </script>
+</body>
+</html>
